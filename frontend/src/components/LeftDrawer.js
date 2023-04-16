@@ -3,6 +3,7 @@ import { Drawer, Toolbar } from '@mui/material';
 import { COLORS } from '../constants/colors';
 import { CONSTANTS } from '../constants/sizes';
 import AppLogo from "../assets/AppLogo.png";
+import LeftDrawerItemList from './LeftDrawerItemList';
 
 const LeftDrawer = () => {
   return (
@@ -28,6 +29,7 @@ const LeftDrawer = () => {
                 onClick={()=>{}}
             />
         </Toolbar>
+        <LeftDrawerItemList />
       </Drawer>
   )
 }
