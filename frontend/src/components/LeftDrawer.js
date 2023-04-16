@@ -1,7 +1,8 @@
 import React from 'react';
-import { Drawer } from '@mui/material';
+import { Drawer, Toolbar } from '@mui/material';
 import { COLORS } from '../constants/colors';
 import { CONSTANTS } from '../constants/sizes';
+import AppLogo from "../assets/AppLogo.png";
 
 const LeftDrawer = () => {
   return (
@@ -19,7 +20,15 @@ const LeftDrawer = () => {
             backgroundColor: COLORS.background_dark,
           },
         }}
-      ></Drawer>
+      >
+        <Toolbar sx={{ mt: '5vh', mb: '10vh' }}>
+            <img 
+                src={AppLogo} alt="Logo" height={50} 
+                style={{ cursor: 'pointer'}} 
+                onClick={()=>{}}
+            />
+        </Toolbar>
+      </Drawer>
   )
 }
 
