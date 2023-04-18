@@ -1,6 +1,7 @@
 import React from 'react';
 import { createTheme, Paper, ThemeProvider } from '@mui/material';
 import "./App.css";
+import LeftDrawer from './components/LeftDrawer';
 
 const darkTheme = createTheme({
   palette: { mode: 'dark' }
@@ -14,7 +15,7 @@ const App = () => {
     <ThemeProvider theme={globeTheme ? darkTheme : lightTheme}>
       <Paper style={{ height: "100vh" }} square={true}>
         <div className='app'>
-          App
+          <LeftDrawer />
         </div>
       </Paper>
     </ThemeProvider>
