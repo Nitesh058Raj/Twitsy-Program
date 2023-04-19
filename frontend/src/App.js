@@ -1,6 +1,6 @@
+import "./App.css";
 import React from 'react';
 import { createTheme, Paper, ThemeProvider } from '@mui/material';
-import "./App.css";
 import LeftDrawer from './components/LeftDrawer';
 
 const darkTheme = createTheme({
