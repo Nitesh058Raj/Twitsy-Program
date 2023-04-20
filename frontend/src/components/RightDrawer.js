@@ -2,6 +2,7 @@ import React from 'react';
 import { Drawer } from '@mui/material';
 import { COLORS } from '../constants/colors';
 import { CONSTANTS } from '../constants/sizes';
+import ProfileBox from './ProfileBox';
 
 const RightDrawer = () => {
   return (
@@ -20,7 +21,7 @@ const RightDrawer = () => {
           },
         }}
       >
-
+        <ProfileBox />
       </Drawer>
   )
 }
