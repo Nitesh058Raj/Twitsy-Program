@@ -3,6 +3,7 @@ import React from 'react';
 import { createTheme, Paper, ThemeProvider } from '@mui/material';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
+import TweetsHomePage from "./components/TweetsHomePage";
 
 
 const darkTheme = createTheme({
@@ -20,7 +21,9 @@ const App = () => {
           <Router>
             <Routes>
               <Route index element={<Layout />} />
-              <Route path="/" element={<Layout />}></Route>
+              <Route path="/" element={<Layout />}>
+                <Route path="home" element={<TweetsHomePage />} />
+              </Route>
             </Routes>
           </Router>
         </div>
