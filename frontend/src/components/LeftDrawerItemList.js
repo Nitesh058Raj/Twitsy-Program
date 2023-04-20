@@ -1,19 +1,27 @@
 import React from 'react';
 import { List, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material';
+import { useDispatch, useSelector } from "react-redux";
 import { Home, Bookmark } from '@mui/icons-material';
 import { COLORS } from '../constants/colors';
+import { setActiveTab } from "../redux/activeTab/activeTabAction";
 
 const LeftDrawerItemList = () => {
-    const [active, setActive] = React.useState([false, false]);
     const ItemList = ['Home', 'My Tweets'];
     const ItemIconList = ['Home', 'Bookmark'];
+    const dispatch = useDispatch();
 
-    const onListItemClicked = (id, tab) => {
-        const updatedActive = active.map((isActive, index) => {
-          return ( index === id ? true : false )
-        });
-        setActive(updatedActive);    
-      };
+
+    const currentTab = useSelector(
+        state => state.activeTabReducer.activeTab
+    );
+
+    const setActiveTabName = (tabName) => {
+        dispatch(setActiveTab(tabName));
+    }
+
+    const isActiveTab = (tabName) => {
+        return tabName === currentTab ? true : false;
+    }
 
     const getIcon = (item, clicked) => {
         switch (item) {
@@ -25,7 +33,7 @@ const LeftDrawerItemList = () => {
                 return null;
         }
     };
-    
+
     return (
         <List sx={{ padding: 0 }}>
             {ItemList.map((item, key) => {
@@ -34,18 +42,18 @@ const LeftDrawerItemList = () => {
                         key={key}
                         disableTouchRipple={true}
                         sx={{
-                            color: active[key] ? COLORS.primary : COLORS.white,
+                            color: isActiveTab(item) ? COLORS.primary : COLORS.white,
                             height: 80,
                             paddingLeft: 5,
                             borderLeftWidth: 3,
                             borderLeftStyle: 'solid',
                             borderLeftColor: (theme) =>
-                                theme.palette.mode === 'dark' && active[key] ? COLORS.primary : COLORS.background_dark,
+                                theme.palette.mode === 'dark' && isActiveTab(item) ? COLORS.primary : COLORS.background_dark,
                         }}
-                        onClick={() => onListItemClicked(key, item)}
+                        onClick={() => setActiveTabName(item)}
                     >
                         <ListItemIcon>
-                            {getIcon(ItemIconList[key], active[key])}
+                            {getIcon(ItemIconList[key], isActiveTab(item))}
                         </ListItemIcon>
                         <ListItemText primary={
                             <Typography sx={{ fontSize: 28 }}> {item} </Typography>
