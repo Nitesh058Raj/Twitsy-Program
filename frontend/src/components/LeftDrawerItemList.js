@@ -1,6 +1,7 @@
 import React from 'react';
 import { List, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material';
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from 'react-router-dom';
 import { Home, Bookmark } from '@mui/icons-material';
 import { COLORS } from '../constants/colors';
 import { setActiveTab } from "../redux/activeTab/activeTabAction";
@@ -9,14 +10,16 @@ const LeftDrawerItemList = () => {
     const ItemList = ['Home', 'My Tweets'];
     const ItemIconList = ['Home', 'Bookmark'];
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
 
     const currentTab = useSelector(
         state => state.activeTabReducer.activeTab
     );
 
-    const setActiveTabName = (tabName) => {
+    const onTabClicked = (tabName) => {
         dispatch(setActiveTab(tabName));
+        tabName === "Home" ? navigate("home") : navigate("");
     }
 
     const isActiveTab = (tabName) => {
@@ -50,7 +53,7 @@ const LeftDrawerItemList = () => {
                             borderLeftColor: (theme) =>
                                 theme.palette.mode === 'dark' && isActiveTab(item) ? COLORS.primary : COLORS.background_dark,
                         }}
-                        onClick={() => setActiveTabName(item)}
+                        onClick={() => onTabClicked(item)}
                     >
                         <ListItemIcon>
                             {getIcon(ItemIconList[key], isActiveTab(item))}
