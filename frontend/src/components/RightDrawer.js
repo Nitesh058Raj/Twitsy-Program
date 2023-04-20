@@ -25,6 +25,7 @@ const RightDrawer = () => {
         <ApplicationSettings />
         <Divider />
         <ProfileBox />
+        <Divider />
       </Drawer>
   )
 }
