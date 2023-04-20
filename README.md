@@ -3,4 +3,4 @@
 ### Frontend Application (till now)
 > `http://localhost:3000`
 
-![image](https://user-images.githubusercontent.com/126231497/232689604-616ab229-54e8-401b-96c1-526d02293905.png)
+![image](https://user-images.githubusercontent.com/91736791/233269362-05776fb0-55a7-4184-aa48-2eb0f2b07d7b.png)
