@@ -22,7 +22,7 @@ const App = () => {
           <Router>
             <Routes>
               <Route index element={<GatewayPage />} />
-              <Route path="/" element={<Layout />}>
+              <Route path="/app" element={<Layout />}>
                 <Route path="home" element={<TweetsHomePage />} />
               </Route>
             </Routes>
