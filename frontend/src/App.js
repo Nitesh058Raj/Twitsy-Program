@@ -16,7 +16,7 @@ const App = () => {
 
   return (
     <ThemeProvider theme={globeTheme ? darkTheme : lightTheme}>
-      <Paper style={{ height: "100vh" }} square={true}>
+      <Paper style={{ height: "100vh", overflow: 'hidden' }} square={true}>
         <div className='app'>
           <Router>
             <Routes>
