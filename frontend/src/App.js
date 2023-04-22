@@ -4,6 +4,7 @@ import { createTheme, Paper, ThemeProvider } from '@mui/material';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 import TweetsHomePage from "./components/TweetsHomePage";
+import GatewayPage from "./components/GatewayPage";
 
 
 const darkTheme = createTheme({
@@ -20,7 +21,7 @@ const App = () => {
         <div className='app'>
           <Router>
             <Routes>
-              <Route index element={<Layout />} />
+              <Route index element={<GatewayPage />} />
               <Route path="/" element={<Layout />}>
                 <Route path="home" element={<TweetsHomePage />} />
               </Route>
