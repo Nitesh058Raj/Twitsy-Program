@@ -1,0 +1,65 @@
+
+name: CI/CD with GitHub Actions
+
+# Triggers the workflow(pipeline)
+on:
+  push:
+    branches: ["branches-will-update-soon"]  
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+
+jobs:
+  ECS-deploy:
+    runs-on: ubuntu-latest
+    # you can also define env here for env-vars
+    
+    steps:
+       - name: Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+         uses: actions/checkout@v3
+
+       - name: Configure AWS credentials
+         uses: aws-actions/configure-aws-credentials@v1
+         with:
+           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+           aws-region: ap-south-1
+
+       - name: Login to AWS ECR
+         id: login-ecr                            # store as var like ansible
+         uses: aws-actions/amazon-ecr-login@v1
+
+       - name: Build and push Docker image
+         id: build-image
+         uses: docker/build-push-action@v2
+         with:
+           context: .
+           push: true
+           tags: ${{ secrets.REPO_NAME }}:${{ github.sha }}   # sha will generate unique tag every time
+         
+       - name: Terraform apply
+         env:
+           AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+           AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+           REPO_NAME: ${{ secrets.REPO_NAME }}
+           TAG: ${{ github.sha }}
+         run: |
+          cd terra-ecs
+          terraform init 
+          terraform destroy --auto-approve  # for removing existing Infra on aws
+#          terraform apply -var="REPO_NAME=${{ secrets.REPO_NAME }}" -var="TAG=${{ github.sha }}" --auto-approve 
+       
+       - name: Install dependencies for ansible
+         run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pip
+          pip3 install ansible boto3
+
+       - name: Run Ansible playbook
+         env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+         run: |
+          cd ansible
+          ansible-playbook playbook.yml
