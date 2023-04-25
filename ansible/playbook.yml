@@ -43,6 +43,10 @@
       copy:
         src: "template/docker-compose.yml.j2"
         desc: "~/docker-compose.yml"
+    - name: Copy init file for mysql conatiner
+      copy:
+        src: "template/init.sql.j2"
+        desc: "~/dbinit/init.sql"
 
     - name: Start conatiners
       command: docker-compose up
