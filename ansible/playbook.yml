@@ -2,17 +2,25 @@
   hosts: all
   become: true
   vars:
-    ecr_repository: "{{ lookup('env', 'ECR_REPOSITORY') }}"
+    ecr_repository: "{{ lookup('env', 'REPO_NAME') }}"
   tasks:
     - name: Install Docker
       yum:
-        name: docker
+        name: { { item } }
         state: latest
+      loop:
+        - docker
+        - docker-compose
+        - python3
 
     - name: Start Docker service
       service:
         name: docker
         state: started
+
+    - name: Install boto3 for ecr login
+      pip:
+        name: boto3
 
     - name: Authenticate with ECR
       docker_login:
@@ -29,13 +37,12 @@
       loop:
         - { image: "{{ ecr_repository }}/frontend", tag: latest }
         - { image: "{{ ecr_repository }}/backend", tag: latest }
-        - { image: "mysql", tag: "8.0"}
+        - { image: "mysql", tag: "8.0" }
 
     - name: Copy file for docker docker-compose
       copy:
         src: "template/docker-compose.yml.j2"
         desc: "~/docker-compose.yml"
-    
-    - name: Start conatiners 
-      command: docker-compose up 
-      
+
+    - name: Start conatiners
+      command: docker-compose up
