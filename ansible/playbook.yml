@@ -1,0 +1,41 @@
+- name: Install Docker and pull images from ECR
+  hosts: all
+  become: true
+  vars:
+    ecr_repository: "{{ lookup('env', 'ECR_REPOSITORY') }}"
+  tasks:
+    - name: Install Docker
+      yum:
+        name: docker
+        state: latest
+
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+
+    - name: Authenticate with ECR
+      docker_login:
+        username: AWS
+        password: "{{ lookup('aws_secret', 'my-ecr-login') }}"
+        registry_url: "{{ ecr_repository }}"
+
+    - name: Pull ECR images
+      docker_image:
+        name: "{{ item.image }}"
+        source: pull
+        tag: "{{ item.tag }}"
+        pull_timeout: 600
+      loop:
+        - { image: "{{ ecr_repository }}/frontend", tag: latest }
+        - { image: "{{ ecr_repository }}/backend", tag: latest }
+        - { image: "mysql", tag: "8.0"}
+
+    - name: Copy file for docker docker-compose
+      copy:
+        src: "template/docker-compose.yml.j2"
+        desc: "~/docker-compose.yml"
+    
+    - name: Start conatiners 
+      command: docker-compose up 
+      
