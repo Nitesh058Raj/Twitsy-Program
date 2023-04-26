@@ -38,27 +38,30 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/ec2-key.pem
           chmod 600 ~/.ssh/ec2-key.pem
-#
-#      - name: Build and push Docker image
-#        id: build-image
-#        uses: docker/build-push-action@v2
-#        with:
-#          context: .
-#          push: true
-#          tags: ${{ secrets.REPO_NAME }}:${{ github.sha }} # sha will generate unique tag every time
 
-      - name: Build and push backend image
-        run: |
-          cd backend
-          docker build backend:latest
-          docker tag backend:latest ${{ secrets.REPO_NAME }}:backend
-          docker push ${{ secrets.REPO_NAME }}:backend
+      - name: Build and push Docker image
+        id: build-image
+        uses: docker/build-push-action@v2
+        with:
+          context: backend
+          push: true
+          tags: ${{ secrets.REPO_NAME }}:backend
+          dockerfile: backend/Dockerfile
 
-      - name: Build and push frontend image
-        run: |
-          cd ../frontend
-          docker build -t ${{ secrets.REPO_NAME }}:frontend
-          docker push ${{ secrets.REPO_NAME }}:frontend
+      - name: Build and push Docker image
+        id: build-image
+        uses: docker/build-push-action@v2
+        with:
+          context: frontend
+          push: true
+          tags: ${{ secrets.REPO_NAME }}:frontend
+          dockerfile: frontend/Dockerfile
+
+      # - name: Build and push frontend image
+      #   run: |
+      #     cd ../frontend
+      #     docker build -t ${{ secrets.REPO_NAME }}:frontend
+      #     docker push ${{ secrets.REPO_NAME }}:frontend
 
       - name: Install dependencies for ansible and terraform
         run: |
