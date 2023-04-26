@@ -63,11 +63,10 @@ jobs:
       #     docker build -t ${{ secrets.REPO_NAME }}:frontend
       #     docker push ${{ secrets.REPO_NAME }}:frontend
 
-      - name: Install dependencies for ansible and terraform
+      - name: Install dependencies for ansible 
         run: |
           sudo apt-get update
           sudo apt-get install -y python3-pip
-          sudo apt-get install -y terraform
           pip3 install ansible boto3
 
       - name: Terraform apply
