@@ -28,15 +28,15 @@
         password: "{{ lookup('aws_secret', 'my-ecr-login') }}"
         registry_url: "{{ ecr_repository }}"
 
-    - name: Pull ECR images
+    - name: Pull ECR images and mysql
       docker_image:
         name: "{{ item.image }}"
         source: pull
         tag: "{{ item.tag }}"
         pull_timeout: 600
       loop:
-        - { image: "{{ ecr_repository }}/frontend", tag: latest }
-        - { image: "{{ ecr_repository }}/backend", tag: latest }
+        - { image: "{{ ecr_repository }}", tag: frontend }
+        - { image: "{{ ecr_repository }}", tag: backend }
         - { image: "mysql", tag: "8.0" }
 
     - name: Copy file for docker docker-compose
