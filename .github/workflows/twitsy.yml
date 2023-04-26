@@ -3,7 +3,7 @@ name: CI/CD with GitHub Actions
 # Triggers the workflow(pipeline)
 on:
   push:
-    branches: ["main"]
+    branches: ["cicd/github-actions-resolve"]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -50,13 +50,13 @@ jobs:
       - name: Build and push backend image
         run: |
           cd backend
-          docker build -t {{ secrets.REPO_NAME }}:backend
+          docker build -t ${{ secrets.REPO_NAME }}:backend
           docker push
 
       - name: Build and push frontend image
         run: |
           cd ../frontend
-          docker build -t {{ secrets.REPO_NAME }}:frontend
+          docker build -t ${{ secrets.REPO_NAME }}:frontend
           docker push
 
       - name: Install dependencies for ansible and terraform
