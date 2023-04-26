@@ -50,14 +50,15 @@ jobs:
       - name: Build and push backend image
         run: |
           cd backend
-          docker build -t ${{ secrets.REPO_NAME }}:backend
-          docker push
+          docker build backend:latest
+          docker tag backend:latest ${{ secrets.REPO_NAME }}:backend
+          docker push ${{ secrets.REPO_NAME }}:backend
 
       - name: Build and push frontend image
         run: |
           cd ../frontend
           docker build -t ${{ secrets.REPO_NAME }}:frontend
-          docker push
+          docker push ${{ secrets.REPO_NAME }}:frontend
 
       - name: Install dependencies for ansible and terraform
         run: |
