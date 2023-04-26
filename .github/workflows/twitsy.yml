@@ -39,8 +39,8 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/ec2-key.pem
           chmod 600 ~/.ssh/ec2-key.pem
 
-      - name: Build and push Docker image
-        id: build-image
+      - name: Build and push Docker image for backend
+        id: build-image-1
         uses: docker/build-push-action@v2
         with:
           context: backend
@@ -48,8 +48,8 @@ jobs:
           tags: ${{ secrets.REPO_NAME }}:backend
           dockerfile: backend/Dockerfile
 
-      - name: Build and push Docker image
-        id: build-image
+      - name: Build and push Docker image for frontend
+        id: build-image-2
         uses: docker/build-push-action@v2
         with:
           context: frontend
