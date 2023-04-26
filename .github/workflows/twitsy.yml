@@ -3,7 +3,7 @@ name: CI/CD with GitHub Actions
 # Triggers the workflow(pipeline)
 on:
   push:
-    branches: ["main-will-be"]
+    branches: ["main"]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
