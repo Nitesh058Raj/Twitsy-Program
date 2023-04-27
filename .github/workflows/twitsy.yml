@@ -1,9 +1,9 @@
-name: CI/CD with GitHub Actions
+name: CI/CD with GitHub Actions for Twitsy
 
 # Triggers the workflow(pipeline)
 on:
   push:
-    branches: ["main"]
+    branches: ["cicd/github-actions-resolve"]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -25,9 +25,10 @@ jobs:
           aws-region: ap-south-1
 
       - name: Login to AWS ECR
-        id: login-ecr # store as var like ansible
+        id: login-ecr 
         uses: aws-actions/amazon-ecr-login@v1
 
+      # for terraform and ansible
       - name: Setup SSH agent
         uses: webfactory/ssh-agent@v0.5.0
         with:
@@ -38,49 +39,47 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/ec2-key.pem
           chmod 600 ~/.ssh/ec2-key.pem
-#
-#      - name: Build and push Docker image
-#        id: build-image
-#        uses: docker/build-push-action@v2
-#        with:
-#          context: .
-#          push: true
-#          tags: ${{ secrets.REPO_NAME }}:${{ github.sha }} # sha will generate unique tag every time
 
-      - name: Build and push backend image
-        run: |
-          cd backend
-          docker build -t {{ secrets.REPO_NAME }}:backend
-          docker push
+      - name: Build and push Docker image for backend
+        id: build-image-1
+        uses: docker/build-push-action@v2
+        with:
+          context: backend                        # path/to/content(package)
+          push: true                              
+          tags: ${{ secrets.REPO_NAME }}:backend  
+          dockerfile: backend/Dockerfile          # path/to/Dockerfile
 
-      - name: Build and push frontend image
-        run: |
-          cd ../frontend
-          docker build -t {{ secrets.REPO_NAME }}:frontend
-          docker push
+      - name: Build and push Docker image for frontend
+        id: build-image-2
+        uses: docker/build-push-action@v2
+        with:
+          context: frontend
+          push: true
+          tags: ${{ secrets.REPO_NAME }}:frontend
+          dockerfile: frontend/Dockerfile
 
-      - name: Install dependencies for ansible and terraform
+      - name: Install dependencies for ansible 
         run: |
           sudo apt-get update
           sudo apt-get install -y python3-pip
-          sudo apt-get install -y terraform
           pip3 install ansible boto3
 
-      - name: Terraform apply
+      - name: Terraform apply to create EC2 instance
         env:
           AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
           AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
         run: |
-          cd ../terraform
+          cd terraform
           terraform init 
           terraform plan
           terraform destroy --auto-approve  # for removing existing Infra on aws
-      #          terraform apply -var="REPO_NAME=${{ secrets.REPO_NAME }}" -var="TAG=${{ github.sha }}" --auto-approve
+      #   terraform apply -var="REPO_NAME=${{ secrets.REPO_NAME }}"  --auto-approve
 
-      - name: Run Ansible playbook
+      - name: Run Ansible playbook for configuration in EC2 instance
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
-          cd ../ansible
+          cd ansible
           ansible-playbook playbook.yml
+        if: ${{ failure() }}  # skip the task if it fails
