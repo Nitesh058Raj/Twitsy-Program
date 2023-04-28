@@ -9,7 +9,7 @@ import Router from "./route/route.config.js";
 import logger from "./util/logger.js";
 
 dotenv.config();
-const PORT = process.env.SERVER_PORT || 3000;
+const PORT = process.env.SERVER_PORT || 5000;
 
 //calling express function
 const app = express();
@@ -23,7 +23,11 @@ app.use(Router);
 
 app.get("/", (req, res) => {
   res.send(
-    new Response(HttpStatus.OK.code, HttpStatus.OK.status, "Message: Works Fine")
+    new Response(
+      HttpStatus.OK.code,
+      HttpStatus.OK.status,
+      "Message: Works Fine"
+    )
   );
 });
 app.get("*", (req, res) => {
