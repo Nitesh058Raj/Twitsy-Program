@@ -1,17 +1,24 @@
-import express from 'express';
-import { createTweet, getTweet, getTweets } from '../controller/tweet.controller.js';
-import { createUser } from '../controller/user.controller.js';
+import express from "express";
+import {
+    createTweetWithEmail,
+    getMyTweets,
+    getTweet,
+    getTweets,
+} from "../controller/tweet.controller.js";
+import { createUser, userLogIn } from "../controller/user.controller.js";
 
 const Router = express.Router();
 
-Router.route('/tweet')
-    .post(createTweet)
-    .get(getTweets);
+Router.route("/alltweets").get(getTweets);
 
-Router.route('/tweet/:id')
-    .get(getTweet);
+Router.route("/mytweets").post(getMyTweets);
 
-Router.route('/user')
-    .post(createUser);
+Router.route("/tweet/:id").get(getTweet);
+
+Router.route("/dotweet").post(createTweetWithEmail);
+
+Router.route("/register").post(createUser);
+
+Router.route("/login").post(userLogIn);
 
 export default Router;
