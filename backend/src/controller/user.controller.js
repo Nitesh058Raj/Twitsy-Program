@@ -58,6 +58,7 @@ export const userLogIn = (req, res) => {
             res.send({
               status: HttpStatus.OK.code,
               message: "Welcome",
+              user_details: results
             });
           } else {
             res.send({

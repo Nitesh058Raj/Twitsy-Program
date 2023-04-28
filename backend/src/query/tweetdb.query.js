@@ -5,7 +5,7 @@ const QUERY = {
     CREATE: "INSERT INTO Users(name, email, password) VALUES(?,?,?)",
     DELETE: "DELETE FROM Users WHERE user_id = ?",
     CHECK_EMAIL: "SELECT COUNT(*) FROM Users WHERE email = ?;", // result == "0" --> false
-    CHECK_PASSWORD: "SELECT password FROM Users WHERE email =?",
+    CHECK_PASSWORD: "SELECT * FROM Users WHERE email =?",
   },
   TWEET: {
     SELECT_ALL: "SELECT * FROM Tweets",
