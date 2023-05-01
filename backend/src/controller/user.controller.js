@@ -4,14 +4,15 @@ import QUERY from "../query/tweetdb.query.js";
 import logger from "../util/logger.js";
 
 export const createUser = (req, res) => {
-  logger.info(`${req.method} : ${req.originalUrl} , Creating User...`);
+  logger.info(`${req.method}: ${req.originalUrl} | Registration requested`);
 
   const { username, useremail, password } = req.body;
   if (!useremail || !username || !password) {
     res.send({
       status: HttpStatus.FIELD_ERROR.code,
       message: "Please provide all fields."
-    })
+    });
+    logger.info(`${req.method}: ${req.originalUrl} | Registration failure [X]`);
   }
   else {
     database.query(
@@ -22,8 +23,9 @@ export const createUser = (req, res) => {
           if (error.code == "ER_DUP_ENTRY") {
             res.send({
               status: HttpStatus.CONFLICT.code,
-              message: "Email already exists.",
+              message: "Email already exists",
             });
+            logger.info(`${req.method}: ${req.originalUrl} | Registration failure [X]`);
           } else {
             res.send({
               status: HttpStatus.INTERNAL_SERVER_ERROR.code,
@@ -33,8 +35,9 @@ export const createUser = (req, res) => {
         } else {
           res.send({
             status: HttpStatus.CREATED.code,
-            message: "User created successfully.",
+            message: "User created successfully",
           });
+          logger.info(`${req.method}: ${req.originalUrl} | Registration success`);
         };
       }
     );
@@ -42,6 +45,7 @@ export const createUser = (req, res) => {
 };
 
 export const userLogIn = (req, res) => {
+  logger.info(`${req.method}: ${req.originalUrl} | Login requested`);
 
   const { useremail, password } = req.body;
   if (!useremail || !password) {
@@ -62,6 +66,7 @@ export const userLogIn = (req, res) => {
           status: HttpStatus.FORBIDDEN.code,
           message: "Email does not exists",
         });
+        logger.info(`${req.method}: ${req.originalUrl} | Login failure [X]`);
       } else {
         database.query(
           QUERY.USER.CHECK_PASSWORD,
@@ -78,11 +83,13 @@ export const userLogIn = (req, res) => {
                 message: "Login successfully",
                 user_details: results
               });
+              logger.info(`${req.method}: ${req.originalUrl} | Login success`);
             } else {
               res.send({
                 status: HttpStatus.FORBIDDEN.code,
                 message: "Invalid Password",
               });
+              logger.info(`${req.method}: ${req.originalUrl} | Login failure [X]`);
             }
           }
         );
