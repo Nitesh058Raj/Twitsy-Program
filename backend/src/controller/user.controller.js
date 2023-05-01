@@ -42,41 +42,51 @@ export const createUser = (req, res) => {
 };
 
 export const userLogIn = (req, res) => {
-  database.query(QUERY.USER.CHECK_EMAIL, req.body.email, (error, results) => {
-    if (error) {
-      res.send({
-        status: HttpStatus.INTERNAL_SERVER_ERROR.code,
-        message: "There is an error",
-      });
-    } else if (results[0]["COUNT(*)"] == "0") {
-      res.send({
-        status: HttpStatus.FORBIDDEN.code,
-        message: "Email does not exists",
-      });
-    } else {
-      database.query(
-        QUERY.USER.CHECK_PASSWORD,
-        req.body.email,
-        (error, results) => {
-          if (error) {
-            res.send({
-              status: HttpStatus.INTERNAL_SERVER_ERROR.code,
-              message: "There is an error",
-            });
-          } else if (results[0]["password"] === req.body.password) {
-            res.send({
-              status: HttpStatus.OK.code,
-              message: "Welcome",
-              user_details: results
-            });
-          } else {
-            res.send({
-              status: HttpStatus.FORBIDDEN.code,
-              message: "Password does not match",
-            });
+
+  const { useremail, password } = req.body;
+  if (!useremail || !password) {
+    res.send({
+      status: HttpStatus.FIELD_ERROR.code,
+      message: "Please provide all fields."
+    })
+  }
+  else {
+    database.query(QUERY.USER.CHECK_EMAIL, useremail, (error, results) => {
+      if (error) {
+        res.send({
+          status: HttpStatus.INTERNAL_SERVER_ERROR.code,
+          message: `Server side error: ${error}`,
+        });
+      } else if (results[0]["COUNT(*)"] == 0) {
+        res.send({
+          status: HttpStatus.FORBIDDEN.code,
+          message: "Email does not exists",
+        });
+      } else {
+        database.query(
+          QUERY.USER.CHECK_PASSWORD,
+          useremail,
+          (error, results) => {
+            if (error) {
+              res.send({
+                status: HttpStatus.INTERNAL_SERVER_ERROR.code,
+                message: `Server side error: ${error}`,
+              });
+            } else if (results[0]["password"] === password) {
+              res.send({
+                status: HttpStatus.OK.code,
+                message: "Login successfully",
+                user_details: results
+              });
+            } else {
+              res.send({
+                status: HttpStatus.FORBIDDEN.code,
+                message: "Invalid Password",
+              });
+            }
           }
-        }
-      );
-    }
-  });
+        );
+      }
+    })
+  }
 };
