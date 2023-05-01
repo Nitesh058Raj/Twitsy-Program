@@ -6,30 +6,39 @@ import logger from "../util/logger.js";
 export const createUser = (req, res) => {
   logger.info(`${req.method} : ${req.originalUrl} , Creating User...`);
 
-  database.query(
-    QUERY.USER.CREATE,
-    Object.values(req.body),
-    (error, results) => {
-      if (error) {
-        if (error.code == "ER_DUP_ENTRY") {
-          res.send({
-            status: HttpStatus.CONFLICT.code,
-            message: "Email Id already exists",
-          });
+  const { username, useremail, password } = req.body;
+  if (!useremail || !username || !password) {
+    res.send({
+      status: HttpStatus.FIELD_ERROR.code,
+      message: "Please provide all fields."
+    })
+  }
+  else {
+    database.query(
+      QUERY.USER.CREATE,
+      Object.values(req.body),
+      (error, results) => {
+        if (error) {
+          if (error.code == "ER_DUP_ENTRY") {
+            res.send({
+              status: HttpStatus.CONFLICT.code,
+              message: "Email already exists.",
+            });
+          } else {
+            res.send({
+              status: HttpStatus.INTERNAL_SERVER_ERROR.code,
+              message: `Server side error: ${error}`,
+            });
+          }
         } else {
           res.send({
-            status: HttpStatus.INTERNAL_SERVER_ERROR.code,
-            message: "There is an Error",
+            status: HttpStatus.CREATED.code,
+            message: "User created successfully.",
           });
-        }
-      } else {
-        res.send({
-          status: HttpStatus.CREATED.code,
-          message: "User Created",
-        });
+        };
       }
-    }
-  );
+    );
+  }
 };
 
 export const userLogIn = (req, res) => {
