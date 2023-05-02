@@ -8,7 +8,7 @@ const QUERY = {
     CHECK_PASSWORD: "SELECT * FROM Users WHERE email =?",
   },
   TWEET: {
-    SELECT_ALL: "SELECT * FROM Tweets",
+    SELECT_ALL: "SELECT t.content, u.name, u.email FROM Tweets t JOIN Users u ON t.user_id = u.user_id",
     SELECT: "SELECT * FROM Tweets WHERE tweet_id = ?",
     CREATE: "INSERT INTO Tweets(user_id, content) VALUES(?,?)",
     UPDATE: "UPDATE Tweets SET content = ? WHERE tweet_id= ?",
