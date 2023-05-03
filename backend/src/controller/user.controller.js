@@ -36,6 +36,10 @@ export const createUser = (req, res) => {
           res.send({
             status: HttpStatus.CREATED.code,
             message: "User created successfully",
+            user_details: {
+              name: username,
+              email: useremail
+            }
           });
           logger.info(`${req.method}: ${req.originalUrl} | Registration success`);
         };
