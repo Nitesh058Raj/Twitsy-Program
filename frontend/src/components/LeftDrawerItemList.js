@@ -19,7 +19,7 @@ const LeftDrawerItemList = () => {
 
     const onTabClicked = (tabName) => {
         dispatch(setActiveTab(tabName));
-        tabName === "Home" ? navigate("home") : navigate("");
+        tabName === "Home" ? navigate("home") : navigate("mytweets");
     }
 
     const isActiveTab = (tabName) => {

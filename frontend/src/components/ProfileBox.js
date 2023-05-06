@@ -1,8 +1,23 @@
 import { Settings } from "@mui/icons-material";
 import { Avatar, Box, IconButton, Typography } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import setUser from "../redux/currentUser/currentUserAction";
 
 const ProfileBox = () => {
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
+        console.log("Checking userInfo");
+        if (userInfo) {
+            dispatch(setUser([
+                userInfo.name,
+                userInfo.email
+            ]));
+        }
+    }, [dispatch])
 
     const currentUser = useSelector(
         (state) => state.userReducer.userInfo
