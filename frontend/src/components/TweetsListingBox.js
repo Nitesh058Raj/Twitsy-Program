@@ -1,35 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import TweetComponent from './TweetComponent';
+import axios from 'axios';
 
 const TweetsListingBox = () => {
-  // TODO: Fetch tweets from backend
-  const tweetsFromBackend = [
-    {
-      tweetBy: {
-        name: 'Vinay Gupta',
-        email: 'vinay@gupta.com',
-        avatarUrl: ''
-      },
-      tweetContent: 'Hi! How are you all? \nMaterial UI is an open-source React component library'
-    },
-    {
-      tweetBy: {
-        name: 'Nitesh Raj',
-        email: 'nitesh@raj.com',
-        avatarUrl: ''
-      },
-      tweetContent: 'Oh hi! We are good :) \nMaterial UI is beautiful by design and features a suite of customization options'
-    }
-  ];
+  const [allTweets, setAllTweets] = useState([]);
 
+  useEffect(() => {
+    getAllTweets();
+  }, []);
+
+  const getAllTweets = () => {
+    axios.get("http://localhost:5000/alltweets")
+      .then((r) => {
+        console.log("Response length:", r.data.tweets.length);
+        setAllTweets(r.data.tweets);
+      }).catch((err) => {
+        console.log("Error while fetching all tweets:" ,err);
+      })
+  };
 
   return (
     <Box sx={{
       overflowY: 'scroll',
       padding: '20px 5px', maxHeight: '86vh'
     }}>
-      {tweetsFromBackend.map((item, key) => {
+      {allTweets.map((item, key) => {
         return (
           <TweetComponent details={item} key={key} />
         )
