@@ -16,7 +16,7 @@ const QUERY = {
     CREATE_WITH_EMAIL:
       "INSERT INTO Tweets (user_id, content) SELECT u.user_id, ? FROM Users u WHERE u.email = ?;",
     SELECT_WITH_EMAIL:
-      "SELECT t.content, t.created_at from Tweets t JOIN Users u ON t.user_id = u.user_id WHERE u.email = ?;",
+      "SELECT u.name, u.email, t.content, t.created_at from Tweets t JOIN Users u ON t.user_id = u.user_id WHERE u.email = ?;",
   },
 };
 
