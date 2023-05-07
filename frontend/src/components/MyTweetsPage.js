@@ -1,15 +1,15 @@
-import React from 'react';
 import { Box, Divider, Typography } from '@mui/material';
+import React from 'react';
 import TweetsListingBox from './TweetsListingBox';
 
-const TweetsHomePage = () => {
+const MyTweetsPage = () => {
     return (
         <Box sx={{ padding: '10px 15px' }}>
-            <Typography sx={{ fontSize: 32 }}># Home</Typography>
+            <Typography sx={{ fontSize: 32 }}># My Tweets</Typography>
             <Divider />
-            <TweetsListingBox isHomePage={true} />
+            <TweetsListingBox pageName={"mytweets"} />
         </Box>
     )
 }
 
-export default TweetsHomePage;
+export default MyTweetsPage;

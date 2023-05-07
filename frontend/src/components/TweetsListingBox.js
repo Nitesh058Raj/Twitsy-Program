@@ -1,39 +1,85 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import TweetComponent from './TweetComponent';
+import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import setUser from '../redux/currentUser/currentUserAction';
 
-const TweetsListingBox = () => {
-  // TODO: Fetch tweets from backend
-  const tweetsFromBackend = [
-    {
-      tweetBy: {
-        name: 'Vinay Gupta',
-        email: 'vinay@gupta.com',
-        avatarUrl: ''
-      },
-      tweetContent: 'Hi! How are you all? \nMaterial UI is an open-source React component library'
-    },
-    {
-      tweetBy: {
-        name: 'Nitesh Raj',
-        email: 'nitesh@raj.com',
-        avatarUrl: ''
-      },
-      tweetContent: 'Oh hi! We are good :) \nMaterial UI is beautiful by design and features a suite of customization options'
-    }
-  ];
+const TweetsListingBox = (props) => {
+  const [allTweets, setAllTweets] = useState([]);
+  const [myTweets, setMyTweets] = useState([]);
+  const dispatch = useDispatch();
 
+  const getAllTweets = () => {
+    axios.get("http://localhost:5000/alltweets")
+      .then((r) => {
+        if (r.data.status === 502 || r.data.status === 204) {
+          console.log(r.data.message);
+        } else if (r.data.status === 200) {
+          console.log("Response length:", r.data.tweets.length);
+          setAllTweets(r.data.tweets);
+        }
+      }).catch((err) => {
+        console.log("Error while fetching all tweets:", err);
+      })
+  };
+
+  const getMyTweets = () => {
+    axios.post("http://localhost:5000/mytweets", {
+      useremail: currentUser[1]
+    })
+      .then((r) => {
+        if (r.data.status === 502 || r.data.status === 204) {
+          console.log(r.data.message);
+        } else if (r.data.status === 200) {
+          console.log("Response length:", r.data.tweets.length);
+          setMyTweets(r.data.tweets);
+        }
+      }).catch((err) => {
+        console.log("Error while fetching all tweets:", err);
+      })
+  };
+
+  useEffect(() => {
+    const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+
+    if (userInfo) {
+      dispatch(setUser([
+        userInfo.name,
+        userInfo.email
+      ]));
+    };
+
+
+    if (props.isHomePage) {
+      getAllTweets();
+    } else {
+      getMyTweets();
+    };
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, props.isHomePage]);
+
+  const currentUser = useSelector(
+    (state) => state.userReducer.userInfo
+  );
 
   return (
     <Box sx={{
       overflowY: 'scroll',
       padding: '20px 5px', maxHeight: '86vh'
     }}>
-      {tweetsFromBackend.map((item, key) => {
+      {props.isHomePage ? allTweets.map((item, key) => {
         return (
           <TweetComponent details={item} key={key} />
         )
-      })}
+      }) :
+        myTweets.map((item, key) => {
+          return (
+            <TweetComponent details={item} key={key} />
+          )
+        })
+      }
     </Box>
   )
 }

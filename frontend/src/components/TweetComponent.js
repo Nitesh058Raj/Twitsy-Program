@@ -11,9 +11,9 @@ const TweetComponent = (props) => {
             boxShadow: '0 0 2px gray',
             borderRadius: 2,
         }}>
-            <TweetHeader tweetBy={tweetDetails.tweetBy} />
+            <TweetHeader tweetByName={tweetDetails.name} tweetByEmail={tweetDetails.email} />
             <Divider />
-            <TweetContentArea tweetContent={tweetDetails.tweetContent} />
+            <TweetContentArea tweetContent={tweetDetails.content} />
             <Divider />
             <TweetAction />
         </Box>
@@ -26,14 +26,14 @@ const TweetHeader = (props) => {
     return (
         <Box sx={{ padding: '10px 20px', display: 'flex', alignItems: 'center', }}>
             <Avatar sx={{ width: 50, height: 50, }} />
-            <Typography variant='h5' sx={{ pl: 2 }}>{props.tweetBy.name}</Typography>
+            <Typography variant='h5' sx={{ pl: 2 }}>{props.tweetByName}</Typography>
         </Box>
     );
 };
 
 const TweetContentArea = (props) => {
     return (
-        <Box sx={{ m: 2, ml: 3 }}>
+        <Box sx={{ m: 2, ml: 3, overflow: 'hidden' }}>
             <Typography component="pre" sx={{ fontSize: 18 }}>
                 {props.tweetContent}
             </Typography>

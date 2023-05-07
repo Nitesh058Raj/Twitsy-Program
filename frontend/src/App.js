@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout";
 import TweetsHomePage from "./components/TweetsHomePage";
 import GatewayPage from "./components/GatewayPage";
+import MyTweetsPage from "./components/MyTweetsPage";
 
 
 const darkTheme = createTheme({
@@ -24,6 +25,7 @@ const App = () => {
               <Route index element={<GatewayPage />} />
               <Route path="/app" element={<Layout />}>
                 <Route path="home" element={<TweetsHomePage />} />
+                <Route path="mytweets" element={<MyTweetsPage />} />
               </Route>
             </Routes>
           </Router>
