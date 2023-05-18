@@ -37,4 +37,59 @@ jobs:
           context: frontend
           dockerfile: frontend/Dockerfile
           tags: niteshraj/twitsyfe:latest
-        
+
+      - name: Build and push Docker image for backend
+        id: image-build-frontend
+        uses: docker/build-push-action@v4
+        with:
+          push: true
+          context: backend
+          dockerfile: backend/Dockerfile
+          tags: niteshraj/twitsybe:latest
+
+      # for terraform and ansible
+      # - name: Setup SSH agent
+      #   uses: webfactory/ssh-agent@v0.5.0
+      #   with:
+      #     ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      # - name: Copy private key for terraform and ansible uses
+      #   run: |
+      #     mkdir -p ~/.ssh
+      #     echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/ec2-key.pem
+      #     chmod 600 ~/.ssh/ec2-key.pem
+
+      # - name: Build and push Docker image for frontend
+      #   id: build-image-2
+      #   uses: docker/build-push-action@v2
+      #   with:
+      #     context: frontend
+      #     push: true
+      #     tags: ${{ secrets.REPO_NAME }}:frontend
+      #     dockerfile: frontend/Dockerfile
+
+      # - name: Install dependencies for ansible 
+      #   run: |
+      #     sudo apt-get update
+      #     sudo apt-get install -y python3-pip
+      #     pip3 install ansible boto3
+
+      # - name: Terraform apply to create EC2 instance
+      #   env:
+      #     AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+      #     AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+      #   run: |
+      #     cd terraform
+      #     terraform init 
+      #     terraform plan
+      #     terraform destroy --auto-approve  # for removing existing Infra on aws
+      # #   terraform apply -var="REPO_NAME=${{ secrets.REPO_NAME }}"  --auto-approve
+
+      # - name: Run Ansible playbook for configuration in EC2 instance
+      #   env:
+      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #   run: |
+      #     cd ansible
+      #     ansible-playbook playbook.yml
+      #   if: ${{ failure() }}  # skip the task if it fails
