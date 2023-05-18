@@ -33,7 +33,7 @@ jobs:
         id: image-build-frontend
         uses: docker/build-push-action@v4
         with:
-          push: false
+          push: true
           context: frontend
           dockerfile: frontend/Dockerfile
           tags: niteshraj/twitsyfe:latest
