@@ -29,11 +29,6 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Log in to Docker Hub
-        run: docker login --username niteshraj --password-stdin
-        env:
-          DOCKER_PASSWORD: ${{ secrets.DOCKERHUB_TOKEN }}
-
       - name: Build and push Docker image for frontend
         id: image-build-frontend
         uses: docker/build-push-action@v4
