@@ -39,7 +39,7 @@ jobs:
           tags: niteshraj/twitsyfe:latest
 
       - name: Build and push Docker image for backend
-        id: image-build-frontend
+        id: image-build-backend
         uses: docker/build-push-action@v4
         with:
           push: true
