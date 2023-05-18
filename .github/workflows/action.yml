@@ -31,8 +31,10 @@ jobs:
           context: frontend
           dockerfile: frontend/Dockerfile
           tags: winay777/twitsyfe:latest
+        env:
+          OUTPUT: ${{ steps.image-build-frontend.outputs }}
 
       - name: Display output for above step
         run: |
-          echo "${steps.run_tests.outputs}" 
+          echo "Output: $OUTPUT"
         
