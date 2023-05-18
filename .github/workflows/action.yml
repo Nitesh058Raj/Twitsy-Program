@@ -1,0 +1,38 @@
+name: Actions for Twitsy-Program
+
+on:
+  push:
+    branches:
+      - 'actions/**'
+
+jobs:
+  Build-and-Push:
+    name: Build and Push Image to Amazon ECR
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - name: Set output variables
+        id: constant-output
+        run: |
+          echo "ECR_REPO_NAME=my-ecr-repo" >> $GITHUB_OUTPUT
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Build and push Docker image for frontend
+        id: image-build-frontend
+        uses: docker/build-push-action@v4
+        with:
+          push: false
+          context: frontend
+          dockerfile: frontend/Dockerfile
+          tags: winay777/twitsyfe:latest
+
+      - name: Display output for above step
+        run: |
+          echo "${steps.run_tests.outputs}" 
+        
