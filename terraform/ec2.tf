@@ -8,7 +8,7 @@ resource "aws_instance" "ec2_instance" {
   }
 
   provisioner "local-exec" {
-    command = "echo ${aws_instance.example.public_ip} > ../ansible/inventory"
+    command = "echo ${aws_instance.ec2_instance.public_ip} > ../ansible/inventory"
   }
 
   user_data = <<-EOF
