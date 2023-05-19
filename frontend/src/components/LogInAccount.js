@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import AccountSubmitButton from './AccountSubmitButton';
 import setUser from "../redux/currentUser/currentUserAction";
 import axios from "axios";
+import env from "react-dotenv";
 
 const MyTextField = styled(TextField)({
     '& label': {
@@ -70,9 +71,10 @@ const LogInAccount = () => {
 
     const onSubmited = (e) => {
         e.preventDefault();
-        console.log("LoginPage: Submit pressed.");
+        console.log(`LoginPage: Submit pressed. ${env.HOST_NAME}`);
+        const HOST = env.HOST_NAME || "localhost";
 
-        axios.post("http://localhost:5000/login", {
+        axios.post(`http://${HOST}:5000/login`, {
             useremail: userEmail,
             password: userPassword
         }).then((r) => {

@@ -1,7 +1,8 @@
 FROM node:alpine3.16
 WORKDIR /usr/code
-COPY package*.json ./
-RUN npm install
 COPY . .
+RUN npm install && \
+    npm install -g serve && \
+    npm run build
 EXPOSE 3000
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "serve"]

@@ -3,6 +3,7 @@ import { styled, Button, Box, Dialog, DialogContent, DialogTitle, DialogActions,
 import { COLORS } from "../constants/colors";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import env from 'react-dotenv';
 
 const TweetButton = (props) => {
     const [open, setOpen] = useState(false);
@@ -37,8 +38,9 @@ const TweetButton = (props) => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        const HOST = env.HOST_NAME || "localhost";
 
-        axios.post("http://localhost:5000/dotweet", {
+        axios.post(`http://${HOST}:5000/dotweet`, {
             useremail: currentUser[1],
             content
         }).then((r) => {

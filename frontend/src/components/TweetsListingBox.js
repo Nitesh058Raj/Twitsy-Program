@@ -4,6 +4,7 @@ import TweetComponent from './TweetComponent';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import setUser from '../redux/currentUser/currentUserAction';
+import env from 'react-dotenv';
 
 const TweetsListingBox = (props) => {
   const [allTweets, setAllTweets] = useState([]);
@@ -11,7 +12,8 @@ const TweetsListingBox = (props) => {
   const dispatch = useDispatch();
 
   const getAllTweets = () => {
-    axios.get("http://localhost:5000/alltweets")
+    const HOST = env.HOST_NAME || "localhost";
+    axios.get(`http://${HOST}:5000/alltweets`)
       .then((r) => {
         if (r.data.status === 502 || r.data.status === 204) {
           console.log(r.data.message);
@@ -25,7 +27,8 @@ const TweetsListingBox = (props) => {
   };
 
   const getMyTweets = () => {
-    axios.post("http://localhost:5000/mytweets", {
+    const HOST = env.HOST_NAME || "localhost";
+    axios.post(`http://${HOST}:5000/mytweets`, {
       useremail: currentUser[1]
     })
       .then((r) => {
