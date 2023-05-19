@@ -73,14 +73,16 @@ jobs:
           cd terraform
           terraform init 
           terraform plan
-          terraform destroy --auto-approve  # for removing existing Infra on aws
-      #   terraform apply -var="REPO_NAME=${{ secrets.REPO_NAME }}"  --auto-approve
+          terraform apply --auto-approve
+          #    terraform destroy --auto-approve  # for removing existing Infra on aws  
 
-      # - name: Run Ansible playbook for configuration in EC2 instance
-      #   env:
-      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #   run: |
-      #     cd ansible
-      #     ansible-playbook playbook.yml
-      #   if: ${{ failure() }}  # skip the task if it fails
+      - name: Run Ansible playbook for configuration in EC2 instance
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+        run: |
+          cd ansible
+          ansible-playbook playbook.yml
+        if: ${{ failure() }}  # skip the task if it fails
