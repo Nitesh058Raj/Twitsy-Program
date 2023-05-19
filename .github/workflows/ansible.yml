@@ -34,6 +34,8 @@ jobs:
           mkdir -p /home/runner/.ssh/
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > /home/runner/.ssh/ec2-key.pem
           chmod 600 /home/runner/.ssh/ec2-key.pem
+          ssh-keyscan -H 52.66.210.193 >> /home/runner/.ssh/known_hosts
+          chmod 600 /home/runner/.ssh/known_hosts
           ls -l /home/runner/.ssh/
           cd ansible
           echo "52.66.210.193" > ./inventory
