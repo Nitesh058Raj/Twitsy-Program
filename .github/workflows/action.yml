@@ -63,7 +63,7 @@ jobs:
         run: |
           mkdir -p /home/runner/.ssh/
           cd /home/runner/.ssh/
-          ssh-keygen -t ed25519 -b 2048 -f my_key_pair          
+          ssh-keygen -t ed25519 -f my_key_pair          
 
       - name: Terraform apply to create EC2 instance
         env:
@@ -78,8 +78,8 @@ jobs:
 
       - name: Sleep task for delay
         run: |
-          sleep 60
-          
+          sleep 45
+
       - name: Ping with ansible
         run: |
           ls -l /home/runner/.ssh/
