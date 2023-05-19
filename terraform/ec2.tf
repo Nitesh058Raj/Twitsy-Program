@@ -12,7 +12,11 @@ resource "aws_instance" "ec2_instance" {
   }
 
   provisioner "local-exec" {
-    command = "echo ${aws_instance.ec2_instance.public_ip} > ../ansible/inventory"
+    command = <<-EOT
+      echo ${aws_instance.ec2_instance.public_ip} > ../ansible/inventory
+      ssh-keyscan -H ${aws_instance.ec2_instance.public_ip} > /home/runner/.ssh/known_hosts
+      chmod 600 /home/runner/.ssh/known_hosts
+    EOT
   }
 
   user_data = <<-EOF
