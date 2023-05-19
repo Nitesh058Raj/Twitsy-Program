@@ -47,32 +47,23 @@ jobs:
           dockerfile: backend/Dockerfile
           tags: niteshraj/twitsybe:latest
 
-      # for terraform and ansible
-      # - name: Setup SSH agent
-      #   uses: webfactory/ssh-agent@v0.5.0
-      #   with:
-      #     ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      #for terraform and ansible
+      - name: Setup SSH agent
+        uses: webfactory/ssh-agent@v0.5.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      # - name: Copy private key for terraform and ansible uses
-      #   run: |
-      #     mkdir -p ~/.ssh
-      #     echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/ec2-key.pem
-      #     chmod 600 ~/.ssh/ec2-key.pem
+      - name: Copy private key for terraform and ansible uses
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/ec2-key.pem
+          chmod 600 ~/.ssh/ec2-key.pem
 
-      # - name: Build and push Docker image for frontend
-      #   id: build-image-2
-      #   uses: docker/build-push-action@v2
-      #   with:
-      #     context: frontend
-      #     push: true
-      #     tags: ${{ secrets.REPO_NAME }}:frontend
-      #     dockerfile: frontend/Dockerfile
-
-      # - name: Install dependencies for ansible 
-      #   run: |
-      #     sudo apt-get update
-      #     sudo apt-get install -y python3-pip
-      #     pip3 install ansible boto3
+      - name: Install dependencies for ansible 
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pip
+          pip3 install ansible boto3
 
       # - name: Terraform apply to create EC2 instance
       #   env:
