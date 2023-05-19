@@ -3,7 +3,7 @@ name: Actions for Twitsy-Program
 on:
   push:
     branches:
-      - 'main'
+      - 'not-now/**'
 
 jobs:
   Build-and-Push:
@@ -79,7 +79,7 @@ jobs:
           mkdir -p /home/runner/.ssh/
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > /home/runner/.ssh/ec2-key.pem
           chmod 600 /home/runner/.ssh/ec2-key.pem
-          ls /home/runner/.ssh/
+          ls -l /home/runner/.ssh/
           cd ansible
           ansible  -i ./inventory all -m ping
 

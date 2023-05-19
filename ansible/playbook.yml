@@ -2,6 +2,7 @@
   hosts: all
   become: true
   vars:
+    ansible_ssh_private_key_file: /home/runner/.ssh/ec2-key.pem
     dockerhub_repository: "niteshraj"
   tasks:
     - name: Install Docker

@@ -1,0 +1,41 @@
+name: Actions for Twitsy-Program
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  Build-and-Push:
+    name: Build and Push Image to Amazon ECR
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - name: Set output variables
+        id: constant-output
+        run: |
+          echo "ECR_REPO_NAME=my-ecr-repo" >> $GITHUB_OUTPUT
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install dependencies for ansible 
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pip
+          pip3 install ansible boto3 
+          
+      - name: Ping with ansible
+        run: |
+          mkdir -p /home/runner/.ssh/
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > /home/runner/.ssh/ec2-key.pem
+          chmod 600 /home/runner/.ssh/ec2-key.pem
+          ls -l /home/runner/.ssh/
+          cd ansible
+          echo "52.66.210.193" > ./inventory
+          ansible  -i ./inventory all -m ping
+
