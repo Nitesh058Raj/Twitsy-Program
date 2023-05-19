@@ -1,9 +1,9 @@
 terraform {
     backend "s3" {
-        bucket = "twitsy-tf-state-backend-cicd"
+        bucket = "cc-tf-state-backend-cicd"
         key = "tf-infra/terraform.tfstate"
         region = "ap-south-1"
-        dynamodb_table = "twitsy-terraform-state-locking"
+        dynamodb_table = "terraform-state-locking"
         encrypt = true
     }
     required_providers {
