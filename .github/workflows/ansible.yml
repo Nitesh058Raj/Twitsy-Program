@@ -29,7 +29,7 @@ jobs:
           sudo apt-get install -y python3-pip
           pip3 install ansible boto3 
           
-      - name: Ping with ansible
+      - name: SSH
         run: |
           mkdir -p /home/runner/.ssh/
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > /home/runner/.ssh/ec2-key.pem
@@ -37,7 +37,11 @@ jobs:
           ssh-keyscan -H 52.66.210.193 >> /home/runner/.ssh/known_hosts
           chmod 600 /home/runner/.ssh/known_hosts
           ls -l /home/runner/.ssh/
+          
+      - name: Ping with ansible
+        run: |
           cd ansible
+          ls -l /home/runner/.ssh/
           echo "52.66.210.193" > ./inventory
           ansible  -i ./inventory all -m ping
 
