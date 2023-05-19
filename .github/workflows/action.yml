@@ -76,13 +76,22 @@ jobs:
           terraform apply --auto-approve
           #    terraform destroy --auto-approve  # for removing existing Infra on aws  
 
-      - name: Run Ansible playbook for configuration in EC2 instance
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Sleep task for delay
+        run: |
+          sleep 120
+
+      - name: Ping with ansible
         run: |
           cd ansible
-          ansible-playbook playbook.yml
+          ansible  -i ./inventory all -m ping
+
+      # - name: Run Ansible playbook for configuration in EC2 instance
+      #   env:
+      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      #     DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+      #   run: |
+      #     cd ansible
+      #     ansible-playbook playbook.yml
         
