@@ -3,7 +3,7 @@ name: Actions for Twitsy-Program
 on:
   push:
     branches:
-      - 'actions/**'
+      - 'main'
 
 jobs:
   Build-and-Push:
