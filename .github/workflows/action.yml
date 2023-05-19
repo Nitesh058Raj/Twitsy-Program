@@ -55,9 +55,11 @@ jobs:
 
       - name: Copy private key for terraform and ansible uses
         run: |
-          mkdir -p ~/.ssh
+          mkdir -p /home/runner/.ssh/
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > /home/runner/.ssh/ec2-key.pem
           chmod 600 /home/runner/.ssh/ec2-key.pem
+          chmod +x /home/runner/.ssh/ec2-key.pem
+          ls
 
       - name: Install dependencies for ansible 
         run: |
@@ -78,7 +80,7 @@ jobs:
 
       - name: Sleep task for delay
         run: |
-          sleep 90
+          sleep 60
 
       - name: Ping with ansible
         run: |

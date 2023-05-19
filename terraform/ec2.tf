@@ -11,9 +11,6 @@ resource "aws_instance" "ec2_instance" {
     command = "echo ${aws_instance.ec2_instance.public_ip} > ../ansible/inventory"
   }
 
-  triggers = {
-    always_run = timestamp()
-  }
   user_data = <<-EOF
               #!/bin/bash
               echo "hello world"
