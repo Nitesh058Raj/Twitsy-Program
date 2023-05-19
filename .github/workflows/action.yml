@@ -29,23 +29,23 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push Docker image for frontend
-        id: image-build-frontend
-        uses: docker/build-push-action@v4
-        with:
-          push: true
-          context: frontend
-          dockerfile: frontend/Dockerfile
-          tags: niteshraj/twitsyfe:latest
+      # - name: Build and push Docker image for frontend
+      #   id: image-build-frontend
+      #   uses: docker/build-push-action@v4
+      #   with:
+      #     push: true
+      #     context: frontend
+      #     dockerfile: frontend/Dockerfile
+      #     tags: niteshraj/twitsyfe:latest
 
-      - name: Build and push Docker image for backend
-        id: image-build-backend
-        uses: docker/build-push-action@v4
-        with:
-          push: true
-          context: backend
-          dockerfile: backend/Dockerfile
-          tags: niteshraj/twitsybe:latest
+      # - name: Build and push Docker image for backend
+      #   id: image-build-backend
+      #   uses: docker/build-push-action@v4
+      #   with:
+      #     push: true
+      #     context: backend
+      #     dockerfile: backend/Dockerfile
+      #     tags: niteshraj/twitsybe:latest
 
       #for terraform and ansible
       - name: Setup SSH agent
@@ -65,16 +65,16 @@ jobs:
           sudo apt-get install -y python3-pip
           pip3 install ansible boto3
 
-      # - name: Terraform apply to create EC2 instance
-      #   env:
-      #     AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
-      #     AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
-      #   run: |
-      #     cd terraform
-      #     terraform init 
-      #     terraform plan
-      #     terraform destroy --auto-approve  # for removing existing Infra on aws
-      # #   terraform apply -var="REPO_NAME=${{ secrets.REPO_NAME }}"  --auto-approve
+      - name: Terraform apply to create EC2 instance
+        env:
+          AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
+          AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
+        run: |
+          cd terraform
+          terraform init 
+          terraform plan
+          terraform destroy --auto-approve  # for removing existing Infra on aws
+      #   terraform apply -var="REPO_NAME=${{ secrets.REPO_NAME }}"  --auto-approve
 
       # - name: Run Ansible playbook for configuration in EC2 instance
       #   env:
