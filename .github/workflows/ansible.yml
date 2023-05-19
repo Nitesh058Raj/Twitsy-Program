@@ -3,7 +3,7 @@ name: Actions for Twitsy-Program
 on:
   push:
     branches:
-      - 'main'
+      - 'rest-now/**'
 
 jobs:
   Build-and-Push:
@@ -37,7 +37,7 @@ jobs:
           ssh-keyscan -H 52.66.210.193 >> /home/runner/.ssh/known_hosts
           chmod 600 /home/runner/.ssh/known_hosts
           ls -l /home/runner/.ssh/
-          
+
       - name: Ping with ansible
         run: |
           cd ansible

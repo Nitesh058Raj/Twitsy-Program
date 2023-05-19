@@ -3,7 +3,7 @@ name: Actions for Twitsy-Program
 on:
   push:
     branches:
-      - 'not-now/**'
+      - 'main'
 
 jobs:
   Build-and-Push:
@@ -65,6 +65,7 @@ jobs:
           AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
           cd terraform
+          ssh-keygen -t rsa -b 2048 -f my_key_pair
           terraform init 
           terraform plan
           terraform apply --auto-approve
@@ -73,7 +74,7 @@ jobs:
       - name: Sleep task for delay
         run: |
           sleep 60
-
+          
       - name: Ping with ansible
         run: |
           mkdir -p /home/runner/.ssh/
