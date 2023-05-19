@@ -56,14 +56,14 @@ jobs:
       - name: Copy private key for terraform and ansible uses
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/ec2-key.pem
-          chmod 600 ~/.ssh/ec2-key.pem
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > /home/runner/.ssh/ec2-key.pem
+          chmod 600 /home/runner/.ssh/ec2-key.pem
 
       - name: Install dependencies for ansible 
         run: |
           sudo apt-get update
           sudo apt-get install -y python3-pip
-          pip3 install ansible boto3 sshpass
+          pip3 install ansible boto3 
 
       - name: Terraform apply to create EC2 instance
         env:
@@ -78,7 +78,7 @@ jobs:
 
       - name: Sleep task for delay
         run: |
-          sleep 120
+          sleep 90
 
       - name: Ping with ansible
         run: |
