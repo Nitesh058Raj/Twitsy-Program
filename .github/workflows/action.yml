@@ -53,14 +53,6 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Copy private key for terraform and ansible uses
-        run: |
-          mkdir -p /home/runner/.ssh/
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > /home/runner/.ssh/ec2-key.pem
-          chmod 600 /home/runner/.ssh/ec2-key.pem
-          chmod +x /home/runner/.ssh/ec2-key.pem
-          ls /home/runner/.ssh/
-
       - name: Install dependencies for ansible 
         run: |
           sudo apt-get update
@@ -84,6 +76,10 @@ jobs:
 
       - name: Ping with ansible
         run: |
+          mkdir -p /home/runner/.ssh/
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > /home/runner/.ssh/ec2-key.pem
+          chmod 600 /home/runner/.ssh/ec2-key.pem
+          ls /home/runner/.ssh/
           cd ansible
           ansible  -i ./inventory all -m ping
 
