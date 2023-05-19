@@ -6,11 +6,11 @@ resource "aws_instance" "ec2_instance" {
   tags = {
     Name = "twitsy-prod"
   }
-/*
+
   provisioner "local-exec" {
     command = "echo ${aws_instance.example.public_ip} > ../ansible/inventory"
   }
-*/
+
   user_data = <<-EOF
               #!/bin/bash
               echo "hello world"
