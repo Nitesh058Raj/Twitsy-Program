@@ -59,13 +59,18 @@ jobs:
           sudo apt-get install -y python3-pip
           pip3 install ansible boto3 
 
+      - name: SSH
+        run: |
+          mkdir /home/runner/.ssh/
+          cd /home/runner/.ssh/
+          ssh-keygen -t rsa -b 2048 -f my_key_pair          
+
       - name: Terraform apply to create EC2 instance
         env:
           AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: |
           cd terraform
-          ssh-keygen -t rsa -b 2048 -f my_key_pair
           terraform init 
           terraform plan
           terraform apply --auto-approve
@@ -77,13 +82,13 @@ jobs:
           
       - name: Ping with ansible
         run: |
-          mkdir -p /home/runner/.ssh/
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > /home/runner/.ssh/ec2-key.pem
-          chmod 600 /home/runner/.ssh/ec2-key.pem
           ls -l /home/runner/.ssh/
           cd ansible
           ansible  -i ./inventory all -m ping
-
+      
+      #    mkdir -p /home/runner/.ssh/
+      #    echo "${{ secrets.SSH_PRIVATE_KEY }}" > /home/runner/.ssh/ec2-key.pem
+      #    chmod 600 /home/runner/.ssh/ec2-key.pem
       # - name: Run Ansible playbook for configuration in EC2 instance
       #   env:
       #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
