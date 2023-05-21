@@ -39,12 +39,12 @@
 
     - name: Copy file for docker-compose
       copy:
-        src: "ansible/template/docker-compose.yml.j2"
+        src: "/home/runner/ansible/template/docker-compose.yml.j2"
         dest: "~/docker-compose.yml"
 
     - name: Copy init file for mysql container
       copy:
-        src: "ansible/template/init.sql.j2"
+        src: "/home/runner/ansible/template/init.sql.j2"
         dest: "~/dbinit/init.sql"
 
     # # Testing
