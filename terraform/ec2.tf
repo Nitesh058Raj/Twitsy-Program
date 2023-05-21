@@ -14,6 +14,7 @@ resource "aws_instance" "ec2_instance" {
   provisioner "local-exec" {
     command = <<-EOT
       echo ${aws_instance.ec2_instance.public_ip} > ../ansible/inventory
+      chmod 600 ../ansible/inventory
       ssh-keyscan -H ${aws_instance.ec2_instance.public_ip} > /home/runner/.ssh/known_hosts
       chmod 600 /home/runner/.ssh/known_hosts
     EOT

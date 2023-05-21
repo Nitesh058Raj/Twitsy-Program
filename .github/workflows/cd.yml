@@ -38,6 +38,10 @@ jobs:
       - name: Sleep task for delay
         run: |
           sleep 45
+      
+      - name: Ansible inventory
+        run: |
+          echo ansible/inventory
 
       - name: Ansible Runs
         uses: dawidd6/action-ansible-playbook@v2.5.0
@@ -50,4 +54,4 @@ jobs:
           playbook: ansible/playbook.yml # path to your Ansible playbook
           directory: ./
           key: ${{ secrets.SSH_PRIVATE_KEY }} # the ssh private key for ansible to use to connect to the servers, stored as "ansible_ssh_private_key" in the GitHub secrets
-          inventory: ansible/inventory
+          inventory: ./ansible/inventory
