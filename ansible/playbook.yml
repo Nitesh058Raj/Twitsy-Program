@@ -47,5 +47,6 @@
         src: "ansible/template/init.sql.j2"
         dest: "~/dbinit/init.sql"
 
+    # Testing
     # - name: Start containers
     #   command: "docker-compose up"
