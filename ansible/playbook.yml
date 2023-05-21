@@ -9,9 +9,9 @@
   tasks:
     - name: Install Docker
       yum:
-        name: "{ { item } }"
+        name: "{{ item }}"
         state: latest
-      with_items:
+      loop:
         - docker
         - docker-compose
         - python3
@@ -25,7 +25,7 @@
       docker_login:
         username: "{{ lookup('env', 'DOCKERHUB_USERNAME') }}"
         password: "{{ lookup('env', 'DOCKERHUB_TOKEN') }}"
-        
+
     - name: Pull images and mysql
       docker_image:
         name: "{{ item.image }}"
@@ -40,12 +40,12 @@
     - name: Copy file for docker-compose
       copy:
         src: "ansible/template/docker-compose.yml.j2"
-        desc: "~/docker-compose.yml"
+        dest: "~/docker-compose.yml"
 
-    - name: Copy init file for mysql conatiner
+    - name: Copy init file for mysql container
       copy:
         src: "ansible/template/init.sql.j2"
-        desc: "~/dbinit/init.sql"
+        dest: "~/dbinit/init.sql"
 
-    # - name: Start conatiners
+    # - name: Start containers
     #   command: "docker-compose up"
