@@ -2,6 +2,7 @@
   hosts: all
   become: true
   become_user: root
+  remote_user: ec2_user
   vars:
     dockerhub_repository: "niteshraj"
     # ansible_ssh_private_key_file: "/home/runner/.ssh/my_key_pair"
