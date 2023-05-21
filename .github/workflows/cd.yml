@@ -37,7 +37,7 @@ jobs:
 
       - name: Sleep task for delay
         run: |
-          sleep 25
+          sleep 10
 
       - name: Ansible Runs
         uses: dawidd6/action-ansible-playbook@v2.5.0
