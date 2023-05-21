@@ -54,4 +54,4 @@ jobs:
           playbook: ansible/playbook.yml # path to your Ansible playbook
           directory: ./
           key: ${{ secrets.SSH_PRIVATE_KEY }} # the ssh private key for ansible to use to connect to the servers, stored as "ansible_ssh_private_key" in the GitHub secrets
-          inventory: ./ansible/inventory
+          inventory: ansible/inventory.yml
