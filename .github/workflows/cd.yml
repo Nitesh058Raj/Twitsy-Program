@@ -37,11 +37,7 @@ jobs:
 
       - name: Sleep task for delay
         run: |
-          sleep 45
-      
-      - name: Ansible inventory
-        run: |
-          echo ansible/inventory
+          sleep 25
 
       - name: Ansible Runs
         uses: dawidd6/action-ansible-playbook@v2.5.0

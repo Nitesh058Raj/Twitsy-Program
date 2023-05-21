@@ -4,12 +4,13 @@
   become_user: root
   become_method: sudo
   remote_user: ec2-user # EC2 Instance user
+  gather_facts: true
   vars:
     dockerhub_repository: "niteshraj"
   tasks:
     - name: facts
       debug:
-        var: "{{ ansible_facts }}"
+        var: ansible_facts
 
     - name: Install Docker and Python3
       yum:
