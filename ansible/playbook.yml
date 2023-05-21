@@ -1,9 +1,10 @@
-- name: Install Docker and pull images from ECR
+- name: Twitsy - Configuration on EC2 Instance
   hosts: all
   become: true
+  become_user: root
   vars:
-    ansible_ssh_private_key_file: "/home/runner/.ssh/my_key_pair"
     dockerhub_repository: "niteshraj"
+    # ansible_ssh_private_key_file: "/home/runner/.ssh/my_key_pair"
   tasks:
     - name: Install Docker
       yum:
@@ -19,16 +20,11 @@
         name: "docker"
         state: started
 
-    - name: Install boto3 for ecr login
-      pip:
-        name: "boto3"
-
     - name: Authenticate with DockerHub
       docker_login:
         username: "{{ lookup('env', 'DOCKERHUB_USERNAME') }}"
         password: "{{ lookup('env', 'DOCKERHUB_TOKEN') }}"
         
-
     - name: Pull images and mysql
       docker_image:
         name: "{{ item.image }}"
@@ -40,13 +36,14 @@
         - { image: "{{ dockerhub_repository }}/be", tag: latest }
         - { image: "mysql", tag: "8.0" }
 
-    - name: Copy file for docker docker-compose
+    - name: Copy file for docker-compose
       copy:
-        src: "template/docker-compose.yml.j2"
+        src: "ansible/template/docker-compose.yml.j2"
         desc: "~/docker-compose.yml"
+
     - name: Copy init file for mysql conatiner
       copy:
-        src: "template/init.sql.j2"
+        src: "ansible/template/init.sql.j2"
         desc: "~/dbinit/init.sql"
 
     # - name: Start conatiners

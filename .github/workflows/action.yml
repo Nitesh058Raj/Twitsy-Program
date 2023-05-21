@@ -3,11 +3,11 @@ name: Actions for Twitsy-Program
 on:
   push:
     branches:
-      - 'main'
+      - 'Not-Now/**'
 
 jobs:
   Build-and-Push:
-    name: Build and Push Image to Amazon ECR
+    name: Build and Push Image to DockerHub
     runs-on: ubuntu-latest
 
     strategy:
@@ -53,18 +53,6 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: Install dependencies for ansible 
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y python3-pip
-          pip3 install ansible boto3 
-
-      - name: SSH
-        run: |
-          mkdir -p /home/runner/.ssh/
-          cd /home/runner/.ssh/
-          ssh-keygen -t ed25519 -f my_key_pair          
-
       - name: Terraform apply to create EC2 instance
         env:
           AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -80,12 +68,14 @@ jobs:
         run: |
           sleep 45
 
-      - name: Ping with ansible
-        run: |
-          ls -l /home/runner/.ssh/
-          cd ansible
-          ansible  -i ./inventory all -m ping
-      
+      - name: Ansible Runs
+        uses: dawidd6/action-ansible-playbook@v2.5.0
+        with:
+          playbook: ansible/playbook.yml # path to your Ansible playbook
+          directory: ./
+          key: ${{ secrets.SSH_PRIVATE_KEY }} # the ssh private key for ansible to use to connect to the servers, stored as "ansible_ssh_private_key" in the GitHub secrets
+          inventory: ansible/inventory # the ansible inventory to use, stored as "ansible_inventory" in the GitHub secrets
+
       #    mkdir -p /home/runner/.ssh/
       #    echo "${{ secrets.SSH_PRIVATE_KEY }}" > /home/runner/.ssh/ec2-key.pem
       #    chmod 600 /home/runner/.ssh/ec2-key.pem

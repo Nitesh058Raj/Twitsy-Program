@@ -1,0 +1,53 @@
+name: CD for Twitsy-Program
+
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  Provisioning-and-Configuration:
+    name: Provisioning and Configuration for Production
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      #for terraform and ansible
+      - name: Setup SSH agent
+        uses: webfactory/ssh-agent@v0.5.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Terraform apply to create EC2 instance
+        env:
+          AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          cd terraform
+          terraform init 
+          terraform plan
+          terraform apply --auto-approve
+          #    terraform destroy --auto-approve  # for removing existing Infra on aws  
+
+      - name: Sleep task for delay
+        run: |
+          sleep 45
+
+      - name: Ansible Runs
+        uses: dawidd6/action-ansible-playbook@v2.5.0
+        env:
+           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+           DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+        with:
+          playbook: ansible/playbook.yml # path to your Ansible playbook
+          directory: ./
+          key: ${{ secrets.SSH_PRIVATE_KEY }} # the ssh private key for ansible to use to connect to the servers, stored as "ansible_ssh_private_key" in the GitHub secrets
+          inventory: ansible/inventory
