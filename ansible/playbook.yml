@@ -7,14 +7,19 @@
   vars:
     dockerhub_repository: "niteshraj"
   tasks:
-    - name: Install Docker
+    - name: Install Docker and Python3
       yum:
         name: "{{ item }}"
         state: latest
       loop:
         - docker
-        - docker-compose
         - python3
+
+    - name: Install Docker-Compose
+      get_url:
+        url: "https://github.com/docker/compose/releases/latest/download/docker-compose-{{ ansible_facts['ansible_kernel'] }}-{{ ansible_facts['ansible_machine'] }}"
+        dest: /usr/local/bin/docker-compose
+        mode: 755  
 
     - name: Start Docker service
       service:
@@ -50,3 +55,8 @@
     # Testing
     # - name: Start containers
     #   command: "docker-compose up"
+    
+    # Docker-Compose Download
+    #sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+    #sudo chmod +x /usr/local/bin/docker-compose
+    #docker-compose version
