@@ -37,7 +37,6 @@
         name: "{{ item.image }}"
         source: pull
         tag: "{{ item.tag }}"
-        pull_timeout: 600
       loop:
         - { image: "{{ dockerhub_repository }}/fe", tag: latest }
         - { image: "{{ dockerhub_repository }}/be", tag: latest }
