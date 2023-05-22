@@ -24,7 +24,7 @@ services:
 
   backend:
     container_name: backendcontainer
-    image: backend:v1
+    image: niteshraj/twitsybe:latest
     restart: no
     ports:
       - 5000:5000
@@ -47,7 +47,7 @@ services:
 
   frontend:
     container_name: frontendcontainer
-    image: frontend:v1
+    image: niteshraj/twitsyfe:latest
     restart: no
     ports:
       - 3000:3000

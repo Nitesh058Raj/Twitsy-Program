@@ -6,7 +6,7 @@
   remote_user: ec2-user # EC2 Instance user
   gather_facts: true
   vars:
-    dockerhub_repository: "niteshraj"
+    dockerhub_repository: "niteshraj" # if we use template module 
   tasks:
     - name: Install Docker and Python3
       yum:
@@ -52,9 +52,8 @@
         src: "./template/init.sql.j2"
         dest: "~/dbinit/init.sql"
 
-    # Testing
-    # - name: Start containers
-    #   command: "docker-compose up"
+    - name: Start containers
+      command: "docker-compose up"
 
     # # Docker-Compose Download
     # #sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
