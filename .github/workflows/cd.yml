@@ -18,6 +18,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: SSH
+        run: |
+          mkdir -p /home/runner/.ssh/   
+
       #for terraform and ansible
       - name: Terraform apply to create EC2 instance
         env:
