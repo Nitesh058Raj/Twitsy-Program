@@ -8,48 +8,53 @@
   vars:
     dockerhub_repository: "niteshraj"
   tasks:
-    # - name: Install Docker and Python3
-    #   yum:
-    #     name: "{{ item }}"
-    #     state: latest
-    #   loop:
-    #     - docker
-    #     - python3
+    - name: Install Docker and Python3
+      yum:
+        name: "{{ item }}"
+        state: latest
+      loop:
+        - docker
+        - python3
 
-    # - name: Install Docker-Compose
-    #   get_url:
-    #     url: "https://github.com/docker/compose/releases/latest/download/docker-compose-{{ ansible_facts['system'] }}-{{ ansible_facts['machine'] }}"
-    #     dest: /usr/local/bin/docker-compose
-    #     mode: 755  
+    - name: Install Docker-Compose
+      get_url:
+        url: "https://github.com/docker/compose/releases/latest/download/docker-compose-{{ ansible_facts['system'] }}-{{ ansible_facts['machine'] }}"
+        dest: /usr/local/bin/docker-compose
+        mode: 755  
 
-    # - name: Start Docker service
-    #   service:
-    #     name: "docker"
-    #     state: started
+    - name: Start Docker service
+      service:
+        name: "docker"
+        state: started
 
-    # - name: Pull images and mysql
-    #   docker_image:
-    #     name: "{{ item.image }}"
-    #     source: pull
-    #     tag: "{{ item.tag }}"
-    #   loop:
-    #     - { image: "{{ dockerhub_repository }}/twitsyfe", tag: latest }
-    #     - { image: "{{ dockerhub_repository }}/twitsybe", tag: latest }
-    #     - { image: "mysql", tag: "8.0" }
+    - name: Pull images fe, be and mysql
+      docker_image:
+        name: "{{ item.image }}"
+        source: pull
+        tag: "{{ item.tag }}"
+      loop:
+        - { image: "{{ dockerhub_repository }}/twitsyfe", tag: latest }
+        - { image: "{{ dockerhub_repository }}/twitsybe", tag: latest }
+        - { image: "mysql", tag: "8.0" }
 
     - name: Copy file for docker-compose
       copy:
         src: "./template/docker-compose.yml.j2"
         dest: "~/docker-compose.yml"
 
+    - name: Create dbinit directory
+      file:
+        path: "~/dbinit/"
+        state: directory
+
     - name: Copy init file for mysql container
       copy:
         src: "./template/init.sql.j2"
         dest: "~/dbinit/init.sql"
 
-    # # Testing
-    # # - name: Start containers
-    # #   command: "docker-compose up"
+    # Testing
+    # - name: Start containers
+    #   command: "docker-compose up"
 
     # # Docker-Compose Download
     # #sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
