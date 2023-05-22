@@ -1,9 +1,9 @@
-name: CD for Twitsy-Program
-
+name: CD
 on:
-  push:
-    branches:
-      - 'main'
+  workflow_run:
+    workflows: ["CI"]
+    types:
+      - completed
 
 jobs:
   Provisioning-and-Configuration:

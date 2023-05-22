@@ -1,8 +1,8 @@
-name: CI for Twitsy-Program
+name: CI
 on:
   push:
     branches:
-      - 'NOt-Now/**'
+      - 'main'
 
 jobs:
   Build-and-Push:
