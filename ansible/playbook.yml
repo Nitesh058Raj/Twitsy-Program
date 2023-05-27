@@ -7,7 +7,16 @@
   gather_facts: true
   vars:
     dockerhub_repository: "niteshraj" # if we use template module 
+    var2: hostvars[inventory_hostname]
   tasks:
+    - name: gather facts
+      debug:
+       var: ansible_facts
+
+    - name: gather facts
+      debug:
+       var: var2
+
     - name: Install Docker and Python3
       yum:
         name: "{{ item }}"

@@ -18,9 +18,9 @@ services:
       - $HOME/dbinit/init.sql:/docker-entrypoint-initdb.d/0_init.sql
       - $HOME/database:/var/lib/mysql
     ports:
-      - "3306":"3306"
+      - 3306:3306
     expose:
-      - "3306"
+      - 3306
     environment:
       MYSQL_DATABASE: tweetdb
       MYSQL_USER: admin
@@ -37,9 +37,9 @@ services:
     image: niteshraj/twitsybe:latest
     restart: no
     ports:
-      - "5000":"5000"
+      - 5000:5000
     expose:
-      - "5000"
+      - 5000
     environment:
       DB_HOST: mysqldb
       DB_PORT: 3306
@@ -61,11 +61,11 @@ services:
     image: niteshraj/twitsyfe:latest
     restart: no
     ports:
-      - "3000":"3000"
+      - 3000:3000
     expose:
-      - "3000"
+      - 3000
     environment:
-      HOST_NAME: "170.20.0.3"
+      HOST_NAME: {{ inventory_hostname }}
       SERVICE_TAGS: prod
       SERVICE_NAME: frontend
       SERVER_PORT: 3000
