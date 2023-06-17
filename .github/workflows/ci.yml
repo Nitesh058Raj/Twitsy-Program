@@ -2,7 +2,7 @@ name: CI
 on:
   push:
     branches:
-      - 'main'
+      - 'rest-now/**'
 
 jobs:
   Build-and-Push:

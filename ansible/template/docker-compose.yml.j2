@@ -25,7 +25,7 @@ services:
       SERVICE_TAGS: prod
       SERVICE_NAME: mysqldb
     networks:
-      internalnet
+      - internalnet
 
   backend:
     container_name: backendcontainer
@@ -48,7 +48,7 @@ services:
     depends_on:
       - mysqldb
     networks:
-      internalnet
+      - internalnet
 
   frontend:
     container_name: frontendcontainer
@@ -67,4 +67,4 @@ services:
       - mysqldb
       - backend
     networks:
-      internalnet
+      - internalnet
