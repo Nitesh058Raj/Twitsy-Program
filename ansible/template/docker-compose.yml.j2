@@ -3,10 +3,6 @@ version: "3"
 networks:
   internalnet:
     driver: bridge
-    ipam:
-      config:
-        - subnet: 170.20.0.0/24
-          gateway: 170.20.0.1
 
 services:
   mysqldb:
@@ -29,8 +25,7 @@ services:
       SERVICE_TAGS: prod
       SERVICE_NAME: mysqldb
     networks:
-      internalnet:
-        ipv4_address: 170.20.0.2
+      internalnet
 
   backend:
     container_name: backendcontainer
@@ -53,8 +48,7 @@ services:
     depends_on:
       - mysqldb
     networks:
-      internalnet:
-        ipv4_address: 170.20.0.3
+      internalnet
 
   frontend:
     container_name: frontendcontainer
@@ -65,14 +59,12 @@ services:
     expose:
       - 3000
     environment:
-      HOST_NAME: {{ inventory_hostname }}
       SERVICE_TAGS: prod
       SERVICE_NAME: frontend
       SERVER_PORT: 3000
+      REACT_APP_BE_HOST: {{ inventory_hostname[0] }}
     depends_on:
       - mysqldb
       - backend
     networks:
-      internalnet:
-        ipv4_address: 170.20.0.4
-
+      internalnet

@@ -12,7 +12,7 @@ const TweetsListingBox = (props) => {
   const dispatch = useDispatch();
 
   const getAllTweets = () => {
-    const HOST = env.HOST_NAME || "localhost";
+    const HOST = env.REACT_APP_BE_HOST || "localhost";
     axios.get(`http://${HOST}:5000/alltweets`)
       .then((r) => {
         if (r.data.status === 502 || r.data.status === 204) {
@@ -27,7 +27,7 @@ const TweetsListingBox = (props) => {
   };
 
   const getMyTweets = () => {
-    const HOST = env.HOST_NAME || "localhost";
+    const HOST = env.REACT_APP_BE_HOST || "localhost";
     axios.post(`http://${HOST}:5000/mytweets`, {
       useremail: currentUser[1]
     })

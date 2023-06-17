@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
 import { Alert, Snackbar, TextField, Typography, styled } from '@mui/material';
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import AccountSubmitButton from './AccountSubmitButton';
-import setUser from "../redux/currentUser/currentUserAction";
 import axios from "axios";
+import React, { useEffect, useState } from 'react';
 import env from "react-dotenv";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import setUser from "../redux/currentUser/currentUserAction";
+import AccountSubmitButton from './AccountSubmitButton';
 
 const MyTextField = styled(TextField)({
     '& label': {
@@ -71,8 +71,8 @@ const LogInAccount = () => {
 
     const onSubmited = (e) => {
         e.preventDefault();
-        console.log(`LoginPage: Submit pressed. ${env.HOST_NAME}`);
-        const HOST = env.HOST_NAME || "localhost";
+        console.log(`LoginPage: Submit pressed. ${env.REACT_APP_BE_HOST}`);
+        const HOST = env.REACT_APP_BE_HOST || "localhost";
 
         axios.post(`http://${HOST}:5000/login`, {
             useremail: userEmail,

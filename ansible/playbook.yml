@@ -11,11 +11,8 @@
   tasks:
     - name: gather facts
       debug:
-       var: ansible_facts
-
-    - name: gather facts
-      debug:
-       var: var2
+       var: inventory_hostname
+      ignore_errors: true
 
     - name: Install Docker and Python3
       yum:
@@ -47,7 +44,7 @@
         - { image: "mysql", tag: "8.0" }
 
     - name: Copy file for docker-compose
-      copy:
+      template:
         src: "./template/docker-compose.yml.j2"
         dest: "~/docker-compose.yml"
 

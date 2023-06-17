@@ -1,3 +1,3 @@
 window.env = {
-  "HOST_NAME": "backendcontainer"
+  "REACT_APP_BE_HOST": ""
 };

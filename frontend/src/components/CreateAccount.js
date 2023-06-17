@@ -72,8 +72,8 @@ const CreateAccount = () => {
 
     const onSubmited = async (e) => {
         e.preventDefault();
-        console.log(`RegisterPage: Submit pressed. ${window.env.HOST_NAME}`);
-        const HOST = env.HOST_NAME || "localhost";
+        console.log(`RegisterPage: Submit pressed. ${window.env.REACT_APP_BE_HOST}`);
+        const HOST = env.REACT_APP_BE_HOST || "localhost";
 
         axios.post(`http://${HOST}:5000/register`, {
             username: userName,
