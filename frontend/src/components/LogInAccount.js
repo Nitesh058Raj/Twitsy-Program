@@ -71,8 +71,8 @@ const LogInAccount = () => {
 
     const onSubmited = (e) => {
         e.preventDefault();
-        console.log(`LoginPage: Submit pressed. ${env.REACT_APP_BE_HOST}`);
-        const HOST = env.REACT_APP_BE_HOST || "localhost";
+        console.log(`Login:: Request sent to: ${process.env.REACT_APP_BE_HOST}`);
+        const HOST = process.env.REACT_APP_BE_HOST || "localhost";
 
         axios.post(`http://${HOST}:5000/login`, {
             useremail: userEmail,

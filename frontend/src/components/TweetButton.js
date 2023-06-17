@@ -38,7 +38,7 @@ const TweetButton = (props) => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        const HOST = env.REACT_APP_BE_HOST || "localhost";
+        const HOST = process.env.REACT_APP_BE_HOST || "localhost";
 
         axios.post(`http://${HOST}:5000/dotweet`, {
             useremail: currentUser[1],
