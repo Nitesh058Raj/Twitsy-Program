@@ -62,7 +62,7 @@ services:
       SERVICE_TAGS: prod
       SERVICE_NAME: frontend
       SERVER_PORT: 3000
-      REACT_APP_BE_HOST: {{ inventory_hostname[0] }}
+      REACT_APP_BE_HOST: {{ inventory_hostname }}
     depends_on:
       - mysqldb
       - backend
