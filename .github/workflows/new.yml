@@ -61,3 +61,17 @@ jobs:
           context: backend
           dockerfile: backend/Dockerfile
           tags: niteshraj/twitsybe:latest
+
+      - name: Ansible Runs
+        uses: dawidd6/action-ansible-playbook@v2.5.0
+        env:
+           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+           DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+        with:
+          playbook: playbook.yml # path to your Ansible playbook
+          directory: ./ansible
+          key: ${{ secrets.SSH_PRIVATE_KEY }} # the ssh private key for ansible to use to connect to the servers, stored as "ansible_ssh_private_key" in the GitHub secrets
+          options: |
+            --inventory ./inventory
