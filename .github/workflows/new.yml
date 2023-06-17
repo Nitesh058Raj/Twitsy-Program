@@ -1,0 +1,63 @@
+name: CID
+on:
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  Build-and-Push:
+    name: Build and Push Image to DockerHub
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: SSH
+        run: |
+          mkdir -p /home/runner/.ssh/  
+
+        #for terraform and ansible
+      - name: Terraform apply to create EC2 instance
+        env:
+          AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          cd terraform
+          terraform init 
+          terraform plan
+          terraform apply --auto-approve
+          #terraform destroy --auto-approve  # for removing existing Infra on aws
+
+      - name: Change .env content
+        run: |
+          tree || ls -l
+          cat ./ansible/inventory >> ./frontend/.env
+
+      - name: Build and push Docker image for frontend
+        id: image-build-frontend
+        uses: docker/build-push-action@v4
+        with:
+          push: true
+          context: frontend
+          dockerfile: frontend/Dockerfile
+          tags: niteshraj/twitsyfe:latest
+
+      - name: Build and push Docker image for backend
+        id: image-build-backend
+        uses: docker/build-push-action@v4
+        with:
+          push: true
+          context: backend
+          dockerfile: backend/Dockerfile
+          tags: niteshraj/twitsybe:latest
